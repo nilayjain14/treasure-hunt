@@ -18,6 +18,9 @@ public class TokenServiceImpl implements TokenService {
     @Value("${query.fetch.token}")
     private String fetchToken;
 
+    @Value("${query.token.valid}")
+    private String validToken;
+
 
     @Override
     public String generateAndSaveToken(String name) {
@@ -30,6 +33,18 @@ public class TokenServiceImpl implements TokenService {
     public List<Participant> fetchToken(String name) {
         return jdbcTemplate.query(fetchToken, new Object[]{name} ,
                 (rs, rowNum) -> new Participant(rs.getString(ApplicationConstant.TOKEN)));
+    }
+
+    @Override
+    public boolean isTokenValid(String token) {
+        List<String> participant = jdbcTemplate.query(validToken, new Object[]{token} ,
+                (rs, rowNum) -> rs.getString(ApplicationConstant.NAME));
+
+        if(participant.isEmpty()){
+            return false;
+        }
+
+        return true;
     }
 
 }

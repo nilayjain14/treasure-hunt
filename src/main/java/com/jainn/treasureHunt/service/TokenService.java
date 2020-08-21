@@ -9,4 +9,6 @@ public interface TokenService {
     public String generateAndSaveToken(String name);
 
     public List<Participant> fetchToken(String name);
+
+    public boolean isTokenValid(String token);
 }
