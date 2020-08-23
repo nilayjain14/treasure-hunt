@@ -1,9 +1,10 @@
 package com.jainn.treasureHunt.controller;
 
-import com.jainn.treasureHunt.model.Participant;
 import com.jainn.treasureHunt.service.TokenService;
+import com.jainn.treasureHunt.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -11,6 +12,9 @@ public class AdminController {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @RequestMapping(value = "register/{name}" , method = RequestMethod.POST)
     public String register(@PathVariable String name, @RequestHeader(value="token") String token){
@@ -30,5 +34,11 @@ public class AdminController {
             return "You are not authorised for this operation!!";
         }
     }
+
+    @RequestMapping("fetchJWT/{name}")
+    public String fetchToken(@PathVariable String name){
+       return jwtUtil.generateToken(name);
+    }
+
 
 }
